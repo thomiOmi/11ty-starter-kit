@@ -1,129 +1,128 @@
-import fs from "fs";
-import path from "path";
-import postcss from "postcss";
-import tailwindcss from "@tailwindcss/postcss";
-import autoprefixer from "autoprefixer";
-import esbuild from "esbuild";
-import crypto from "crypto";
+import fs from 'fs'
+import path from 'path'
+import postcss from 'postcss'
+import tailwindcss from '@tailwindcss/postcss'
+import autoprefixer from 'autoprefixer'
+import esbuild from 'esbuild'
+import crypto from 'crypto'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  eleventyConfig.addPassthroughCopy("src/assets");
+  eleventyConfig.addPassthroughCopy('src/assets')
 
   // --- Environment & Hashing Helper ---
-  const isProd = process.env.NODE_ENV === "production";
+  const isProd = process.env.NODE_ENV === 'production'
 
   // Calculate hashes based on source content (simpler for 11ty pipeline integration)
   // This runs once at startup.
   const getHash = (filepath) => {
     try {
-        const content = fs.readFileSync(filepath, "utf8");
-        return crypto.createHash("md5").update(content).digest("hex").slice(0, 8);
+      const content = fs.readFileSync(filepath, 'utf8')
+      return crypto.createHash('md5').update(content).digest('hex').slice(0, 8)
     } catch (e) {
-        return "latest";
+      return 'latest'
     }
-  };
+  }
 
-  const cssHash = isProd ? getHash("./src/css/style.css") : "dev";
-  const jsHash = isProd ? getHash("./src/js/app.js") : "dev";
+  const cssHash = isProd ? getHash('./src/css/style.css') : 'dev'
+  const jsHash = isProd ? getHash('./src/js/app.js') : 'dev'
 
   // Expose hashes to templates
-  eleventyConfig.addGlobalData("hashes", {
+  eleventyConfig.addGlobalData('hashes', {
     css: cssHash,
     js: jsHash
-  });
+  })
 
   // --- CSS Extension ---
   // Processes *.css files. We'll filter to only process style.css
-  eleventyConfig.addExtension("css", {
-    outputFileExtension: "css",
+  eleventyConfig.addExtension('css', {
+    outputFileExtension: 'css',
 
     // compile: called once per file content
     compile: async function (inputContent, inputPath) {
-      if (path.basename(inputPath) !== "style.css") {
-          return; // Skip other CSS files if any
+      if (path.basename(inputPath) !== 'style.css') {
+        return // Skip other CSS files if any
       }
 
       // Process with PostCSS
-      const result = await postcss([
-        tailwindcss(),
-        autoprefixer(),
-      ]).process(inputContent, { from: inputPath });
+      const result = await postcss([tailwindcss(), autoprefixer()]).process(
+        inputContent,
+        { from: inputPath }
+      )
 
-      let cssCode = result.css;
+      let cssCode = result.css
 
       // Minify if production
       if (isProd) {
         const minified = await esbuild.transform(cssCode, {
-            loader: 'css',
-            minify: true
-        });
-        cssCode = minified.code;
+          loader: 'css',
+          minify: true
+        })
+        cssCode = minified.code
       }
 
       // Return render function
       return async () => {
-        return cssCode;
-      };
+        return cssCode
+      }
     },
 
     // getData: called to get data/permalink
-    getData: async function(inputPath) {
-        if (path.basename(inputPath) !== "style.css") return {};
+    getData: async function (inputPath) {
+      if (path.basename(inputPath) !== 'style.css') return {}
 
-        return {
-            permalink: isProd ? `css/style.${cssHash}.css` : `css/style.css`
-        };
+      return {
+        permalink: isProd ? `css/style.${cssHash}.css` : `css/style.css`
+      }
     }
-  });
-
+  })
 
   // --- JS Extension ---
   // Processes *.js files. We'll filter to only process app.js
-  eleventyConfig.addExtension("js", {
-    outputFileExtension: "js",
+  eleventyConfig.addExtension('js', {
+    outputFileExtension: 'js',
 
-    compile: async function(inputContent, inputPath) {
-        if (path.basename(inputPath) !== "app.js") {
-            return;
-        }
+    compile: async function (inputContent, inputPath) {
+      if (path.basename(inputPath) !== 'app.js') {
+        return
+      }
 
-        // Bundle with Esbuild
-        // We use the inputPath directly as entry point
-        const result = await esbuild.build({
-            entryPoints: [inputPath],
-            bundle: true,
-            minify: isProd,
-            sourcemap: !isProd, // true in dev, false in prod
-            write: false,
-            // We need to return the code, so we use write: false
-        });
+      // Bundle with Esbuild
+      // We use the inputPath directly as entry point
+      const result = await esbuild.build({
+        entryPoints: [inputPath],
+        bundle: true,
+        minify: isProd,
+        sourcemap: !isProd, // true in dev, false in prod
+        write: false
+        // We need to return the code, so we use write: false
+      })
 
-        // Assuming one output file since we have one entry point
-        const code = result.outputFiles[0].text;
+      // Assuming one output file since we have one entry point
+      const code = result.outputFiles[0].text
 
-        return async () => {
-            return code;
-        };
+      return async () => {
+        return code
+      }
     },
 
-    getData: async function(inputPath) {
-        if (path.basename(inputPath) !== "app.js") return {};
+    getData: async function (inputPath) {
+      if (path.basename(inputPath) !== 'app.js') return {}
 
-        return {
-            permalink: isProd ? `js/app.${jsHash}.js` : `js/app.js`
-        };
+      return {
+        permalink: isProd ? `js/app.${jsHash}.js` : `js/app.js`
+      }
     }
-  });
+  })
 
   return {
     dir: {
-      input: "src",
-      output: "dist",
-      includes: "_includes",
+      input: 'src',
+      output: 'dist',
+      includes: '_includes'
     },
-    templateFormats: ["njk", "md", "html", "css", "js"], // Add css and js to formats
-    htmlTemplateEngine: "njk",
-    markdownTemplateEngine: "njk",
-  };
+    templateFormats: ['njk', 'md', 'html', 'css', 'js'], // Add css and js to formats
+    htmlTemplateEngine: 'njk',
+    markdownTemplateEngine: 'njk'
+  }
 }

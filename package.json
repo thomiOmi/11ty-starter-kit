@@ -7,7 +7,10 @@
   "description": "Starter kit with 11ty, Tailwind CSS v4, and Alpine.js",
   "scripts": {
     "build": "cross-env NODE_ENV=production eleventy",
-    "dev": "eleventy --serve"
+    "dev": "eleventy --serve",
+    "prepare": "husky",
+    "lint": "eslint .",
+    "format": "prettier --write ."
   },
   "dependencies": {
     "@11ty/eleventy": "^3.1.2",
@@ -23,5 +26,24 @@
     "last 2 versions",
     "> 0.2%",
     "not dead"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "neostandard": "^0.12.2",
+    "prettier": "^3.7.4",
+    "prettier-plugin-jinja-template": "^2.1.0",
+    "prettier-plugin-tailwindcss": "^0.7.2"
+  },
+  "lint-staged": {
+    "*.{js,mjs,cjs,ts}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,html,md,njk,css}": [
+      "prettier --write"
+    ]
+  }
 }
