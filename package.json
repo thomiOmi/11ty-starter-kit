@@ -6,7 +6,7 @@
   "type": "module",
   "description": "Starter kit with 11ty, Tailwind CSS v4, and Alpine.js",
   "scripts": {
-    "build": "eleventy",
+    "build": "cross-env NODE_ENV=production eleventy",
     "dev": "eleventy --serve"
   },
   "dependencies": {
@@ -14,8 +14,14 @@
     "@tailwindcss/postcss": "^4.1.18",
     "alpinejs": "^3.15.3",
     "autoprefixer": "^10.4.23",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.27.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18"
-  }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "> 0.2%",
+    "not dead"
+  ]
 }

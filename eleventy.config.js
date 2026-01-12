@@ -4,42 +4,116 @@ import postcss from "postcss";
 import tailwindcss from "@tailwindcss/postcss";
 import autoprefixer from "autoprefixer";
 import esbuild from "esbuild";
+import crypto from "crypto";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  // Watch targets for external build pipelines
-  eleventyConfig.addWatchTarget("./src/css/");
-  eleventyConfig.addWatchTarget("./src/js/");
-
   eleventyConfig.addPassthroughCopy("src/assets");
 
-  eleventyConfig.on("eleventy.before", async () => {
-    const tailwindInputPath = path.resolve("./src/css/style.css");
-    const tailwindOutputPath = "./dist/css/style.css";
+  // --- Environment & Hashing Helper ---
+  const isProd = process.env.NODE_ENV === "production";
 
-    const cssContent = fs.readFileSync(tailwindInputPath, "utf8");
-    const outputDir = path.dirname(tailwindOutputPath);
-
-    if (!fs.existsSync(outputDir)) {
-      fs.mkdirSync(outputDir, { recursive: true });
+  // Calculate hashes based on source content (simpler for 11ty pipeline integration)
+  // This runs once at startup.
+  const getHash = (filepath) => {
+    try {
+        const content = fs.readFileSync(filepath, "utf8");
+        return crypto.createHash("md5").update(content).digest("hex").slice(0, 8);
+    } catch (e) {
+        return "latest";
     }
+  };
 
-    const result = await postcss([tailwindcss(), autoprefixer()]).process(
-      cssContent,
-      {
-        from: tailwindInputPath,
-        to: tailwindOutputPath,
+  const cssHash = isProd ? getHash("./src/css/style.css") : "dev";
+  const jsHash = isProd ? getHash("./src/js/app.js") : "dev";
+
+  // Expose hashes to templates
+  eleventyConfig.addGlobalData("hashes", {
+    css: cssHash,
+    js: jsHash
+  });
+
+  // --- CSS Extension ---
+  // Processes *.css files. We'll filter to only process style.css
+  eleventyConfig.addExtension("css", {
+    outputFileExtension: "css",
+
+    // compile: called once per file content
+    compile: async function (inputContent, inputPath) {
+      if (path.basename(inputPath) !== "style.css") {
+          return; // Skip other CSS files if any
       }
-    );
 
-    await esbuild.build({
-      entryPoints: ["./src/js/app.js"],
-      bundle: true,
-      outfile: "./dist/js/app.js",
-      sourcemap: true,
-    });
+      // Process with PostCSS
+      const result = await postcss([
+        tailwindcss(),
+        autoprefixer(),
+      ]).process(inputContent, { from: inputPath });
 
-    fs.writeFileSync(tailwindOutputPath, result.css);
+      let cssCode = result.css;
+
+      // Minify if production
+      if (isProd) {
+        const minified = await esbuild.transform(cssCode, {
+            loader: 'css',
+            minify: true
+        });
+        cssCode = minified.code;
+      }
+
+      // Return render function
+      return async () => {
+        return cssCode;
+      };
+    },
+
+    // getData: called to get data/permalink
+    getData: async function(inputPath) {
+        if (path.basename(inputPath) !== "style.css") return {};
+
+        return {
+            permalink: isProd ? `css/style.${cssHash}.css` : `css/style.css`
+        };
+    }
+  });
+
+
+  // --- JS Extension ---
+  // Processes *.js files. We'll filter to only process app.js
+  eleventyConfig.addExtension("js", {
+    outputFileExtension: "js",
+
+    compile: async function(inputContent, inputPath) {
+        if (path.basename(inputPath) !== "app.js") {
+            return;
+        }
+
+        // Bundle with Esbuild
+        // We use the inputPath directly as entry point
+        const result = await esbuild.build({
+            entryPoints: [inputPath],
+            bundle: true,
+            minify: isProd,
+            sourcemap: !isProd, // true in dev, false in prod
+            write: false,
+            // We need to return the code, so we use write: false
+        });
+
+        // Assuming one output file since we have one entry point
+        const code = result.outputFiles[0].text;
+
+        return async () => {
+            return code;
+        };
+    },
+
+    getData: async function(inputPath) {
+        if (path.basename(inputPath) !== "app.js") return {};
+
+        return {
+            permalink: isProd ? `js/app.${jsHash}.js` : `js/app.js`
+        };
+    }
   });
 
   return {
@@ -48,7 +122,7 @@ export default function (eleventyConfig) {
       output: "dist",
       includes: "_includes",
     },
-    templateFormats: ["njk", "md", "html"],
+    templateFormats: ["njk", "md", "html", "css", "js"], // Add css and js to formats
     htmlTemplateEngine: "njk",
     markdownTemplateEngine: "njk",
   };
