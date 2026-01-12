@@ -7,20 +7,20 @@ eleventyExcludeFromCollections: true
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>{{ site.title }}</title>
   <subtitle>{{ site.description }}</subtitle>
-  <link href="{{ site.url }}/feed.xml" rel="self" />
-  <link href="{{ site.url }}" />
+  <link href="{{ site.url }}{{ '/feed.xml' | url }}" rel="self" />
+  <link href="{{ site.url }}{{ '/' | url }}" />
   <updated>{{ collections.all | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
-  <id>{{ site.url }}</id>
+  <id>{{ site.url }}{{ '/' | url }}</id>
   <author>
     <name>{{ site.author }}</name>
   </author>
   {% for post in collections.all | reverse %}
     <entry>
       <title>{{ post.data.title }}</title>
-      <link href="{{ site.url }}{{ post.url }}" />
+      <link href="{{ site.url }}{{ post.url | url }}" />
       <updated>{{ post.date | dateToRfc3339 }}</updated>
-      <id>{{ site.url }}{{ post.url }}</id>
-      <content type="html">{{ post.content | htmlToAbsoluteUrls(site.url) }}</content>
+      <id>{{ site.url }}{{ post.url | url }}</id>
+      <content type="html">{{ post.content | htmlToAbsoluteUrls(site.url + ('/' | url)) }}</content>
     </entry>
   {% endfor %}
 </feed>

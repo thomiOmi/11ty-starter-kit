@@ -8,12 +8,14 @@ import crypto from 'crypto'
 import { imgShortcode, pictureShortcode } from './src/utils/image-shortcode.js'
 import generateOgImage from './src/utils/og-generator.js'
 import pluginRss from '@11ty/eleventy-plugin-rss'
-import { HtmlBasePlugin } from '@11ty/eleventy'
+import { EleventyHtmlBasePlugin } from '@11ty/eleventy'
+
+const PATH_PREFIX = '/11ty-starter-kit/'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
   eleventyConfig.addPlugin(pluginRss)
-  eleventyConfig.addPlugin(HtmlBasePlugin)
+  eleventyConfig.addPlugin(EleventyHtmlBasePlugin)
 
   eleventyConfig.addNunjucksAsyncShortcode('img', imgShortcode)
   eleventyConfig.addNunjucksAsyncShortcode('picture', pictureShortcode)
@@ -26,7 +28,11 @@ export default function (eleventyConfig) {
     }
     const filename = slug === '/' ? 'home' : slug ? slug.replace(/^\/|\/$/g, '').replace(/\//g, '-') : 'home'
     const url = await generateOgImage(title, filename)
-    return url
+    // url is like "/og/home.png", we need to prepend pathPrefix for proper metadata URL
+    // But wait, HtmlBasePlugin might not catch meta content, so we do it manually.
+    // Ensure we don't double slash if url starts with / and prefix ends with /
+    const cleanUrl = url.startsWith('/') ? url.substring(1) : url
+    return PATH_PREFIX + cleanUrl
   })
 
   eleventyConfig.addPassthroughCopy('src/assets')
@@ -135,7 +141,7 @@ export default function (eleventyConfig) {
   })
 
   return {
-    pathPrefix: '/11ty-starter-kit/',
+    pathPrefix: PATH_PREFIX,
     dir: {
       input: 'src',
       output: 'dist',
