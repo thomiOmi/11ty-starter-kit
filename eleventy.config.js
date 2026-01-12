@@ -3,7 +3,6 @@ import path from 'path'
 import postcss from 'postcss'
 import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
-import magician from 'postcss-font-magician'
 import esbuild from 'esbuild'
 import crypto from 'crypto'
 import { imgShortcode, pictureShortcode } from './src/utils/image-shortcode.js'
@@ -66,14 +65,7 @@ export default function (eleventyConfig) {
       }
 
       // Process with PostCSS
-      const result = await postcss([
-        tailwindcss(),
-        autoprefixer(),
-        magician({
-          foundries: 'google',
-          display: 'swap'
-        })
-      ]).process(inputContent, { from: inputPath })
+      const result = await postcss([tailwindcss(), autoprefixer()]).process(inputContent, { from: inputPath })
 
       let cssCode = result.css
 

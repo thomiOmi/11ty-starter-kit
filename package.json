@@ -24,9 +24,7 @@
     "autoprefixer": "^10.4.23",
     "cross-env": "^7.0.3",
     "esbuild": "^0.27.2",
-    "fontaine": "^0.7.0",
     "postcss": "^8.5.6",
-    "postcss-font-magician": "^4.0.0",
     "satori": "^0.18.3",
     "tailwindcss": "^4.1.18"
   },
