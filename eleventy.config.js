@@ -3,14 +3,19 @@ import path from 'path'
 import postcss from 'postcss'
 import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
+import magician from 'postcss-font-magician'
 import esbuild from 'esbuild'
 import crypto from 'crypto'
-import imageShortcode from './src/utils/image-shortcode.js'
+import { imgShortcode, pictureShortcode } from './src/utils/image-shortcode.js'
 import generateOgImage from './src/utils/og-generator.js'
+import pluginRss from "@11ty/eleventy-plugin-rss";
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  eleventyConfig.addNunjucksAsyncShortcode('image', imageShortcode)
+  eleventyConfig.addPlugin(pluginRss);
+
+  eleventyConfig.addNunjucksAsyncShortcode('img', imgShortcode)
+  eleventyConfig.addNunjucksAsyncShortcode('picture', pictureShortcode)
 
   // OG Image Shortcode
   eleventyConfig.addAsyncShortcode('ogImage', async function (title, slug) {
@@ -61,7 +66,14 @@ export default function (eleventyConfig) {
       }
 
       // Process with PostCSS
-      const result = await postcss([tailwindcss(), autoprefixer()]).process(inputContent, { from: inputPath })
+      const result = await postcss([
+        tailwindcss(),
+        autoprefixer(),
+        magician({
+          foundries: 'google',
+          display: 'swap',
+        })
+      ]).process(inputContent, { from: inputPath })
 
       let cssCode = result.css
 
