@@ -26,7 +26,7 @@ This is a modern, battery-included starter template designed to get your blog, p
 1.  **Clone the repository:**
 
     ```bash
-    git clone <your-repo-url>
+    git clone https://github.com/thomiOmi/11ty-starter-kit.git
     cd 11ty-starter-kit
     ```
 
@@ -78,7 +78,7 @@ A quick look at the `src` directory:
 
 This starter kit comes with configuration files for the most popular hosting platforms.
 
-### GitHub Pages (Recommended)
+### GitHub Pages
 
 This project is configured for **GitHub Pages** using GitHub Actions.
 
