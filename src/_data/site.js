@@ -4,5 +4,5 @@ export default {
     'A lightweight starter kit combining the power of Eleventy, the utility of Tailwind CSS v4, and the interactivity of Alpine.js.',
   url: 'https://example.com',
   author: 'Your Name',
-  language: 'en'
+  lang: 'en'
 }
