@@ -1,20 +1,22 @@
 {
   "files.associations": {
     "*.css": "tailwindcss",
-    "*.njk": "njk"
+    "*.njk": "njk",
+    "*.html": "njk"
   },
   "editor.quickSuggestions": {
     "strings": "on"
   },
   "emmet.includeLanguages": {
-    "nunjucks": "html"
+    "nunjucks": "html",
+    "njk": "html"
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "[nunjucks]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  "tailwindCSS.includeLanguages": {
+    "njk": "html"
   }
 }

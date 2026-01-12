@@ -8,11 +8,11 @@ import esbuild from 'esbuild'
 import crypto from 'crypto'
 import { imgShortcode, pictureShortcode } from './src/utils/image-shortcode.js'
 import generateOgImage from './src/utils/og-generator.js'
-import pluginRss from "@11ty/eleventy-plugin-rss";
+import pluginRss from '@11ty/eleventy-plugin-rss'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
-  eleventyConfig.addPlugin(pluginRss);
+  eleventyConfig.addPlugin(pluginRss)
 
   eleventyConfig.addNunjucksAsyncShortcode('img', imgShortcode)
   eleventyConfig.addNunjucksAsyncShortcode('picture', pictureShortcode)
@@ -71,7 +71,7 @@ export default function (eleventyConfig) {
         autoprefixer(),
         magician({
           foundries: 'google',
-          display: 'swap',
+          display: 'swap'
         })
       ]).process(inputContent, { from: inputPath })
 
