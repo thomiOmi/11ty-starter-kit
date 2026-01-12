@@ -45,10 +45,7 @@ export default function (eleventyConfig) {
       }
 
       // Process with PostCSS
-      const result = await postcss([tailwindcss(), autoprefixer()]).process(
-        inputContent,
-        { from: inputPath }
-      )
+      const result = await postcss([tailwindcss(), autoprefixer()]).process(inputContent, { from: inputPath })
 
       let cssCode = result.css
 

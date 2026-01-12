@@ -6,28 +6,19 @@ title: Welcome to 11ty Starter Kit
 <div class="space-y-8">
   <!-- Hero Section -->
   <section class="py-12 text-center">
-    <h1
-      class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl"
-    >
+    <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl md:text-6xl">
       Build modern sites with <span class="text-secondary">Speed</span>
     </h1>
-    <p
-      class="mx-auto mt-4 max-w-md text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl"
-    >
-      A lightweight starter kit combining the power of Eleventy, the utility of
-      Tailwind CSS v4, and the interactivity of Alpine.js.
+    <p class="mx-auto mt-4 max-w-md text-base text-gray-500 sm:text-lg md:mt-5 md:max-w-3xl md:text-xl">
+      A lightweight starter kit combining the power of Eleventy, the utility of Tailwind CSS v4, and the interactivity
+      of Alpine.js.
     </p>
   </section>
 
   <!-- Interactive Component Demo (Alpine.js) -->
-  <section
-    class="mx-auto max-w-lg rounded-xl bg-white p-6 shadow-md"
-    x-data="{ count: 0 }"
-  >
+  <section class="mx-auto max-w-lg rounded-xl bg-white p-6 shadow-md" x-data="{ count: 0 }">
     <h2 class="mb-4 text-2xl font-bold">Alpine.js Interactivity</h2>
-    <p class="mb-4 text-gray-600">
-      This simple counter demonstrates Alpine.js integration.
-    </p>
+    <p class="mb-4 text-gray-600">This simple counter demonstrates Alpine.js integration.</p>
 
     <div class="flex items-center justify-center space-x-4">
       <button
@@ -47,42 +38,26 @@ title: Welcome to 11ty Starter Kit
       </button>
     </div>
 
-    <div
-      class="mt-6 rounded-lg bg-gray-100 p-4"
-      x-show="count > 5"
-      x-transition
-    >
-      <p class="text-primary text-center font-semibold">
-        Wow, you're clicking a lot!
-      </p>
+    <div class="mt-6 rounded-lg bg-gray-100 p-4" x-show="count > 5" x-transition>
+      <p class="text-primary text-center font-semibold">Wow, you're clicking a lot!</p>
     </div>
   </section>
 
   <!-- Tailwind v4 Features Demo -->
   <section class="mt-12">
-    <h2 class="mb-6 text-center text-2xl font-bold">
-      Tailwind v4 Configuration
-    </h2>
+    <h2 class="mb-6 text-center text-2xl font-bold">Tailwind v4 Configuration</h2>
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
       <div class="rounded-lg border border-gray-200 p-6">
         <h3 class="mb-2 text-lg font-bold">CSS Variables Theme</h3>
-        <p class="mb-4 text-gray-600">
-          The primary color is defined in CSS variables and used here:
-        </p>
-        <div
-          class="bg-primary flex h-12 w-full items-center justify-center rounded-md font-mono text-white"
-        >
+        <p class="mb-4 text-gray-600">The primary color is defined in CSS variables and used here:</p>
+        <div class="bg-primary flex h-12 w-full items-center justify-center rounded-md font-mono text-white">
           bg-primary
         </div>
       </div>
       <div class="rounded-lg border border-gray-200 p-6">
         <h3 class="mb-2 text-lg font-bold">CSS First Config</h3>
-        <p class="mb-4 text-gray-600">
-          The secondary color is also defined in CSS variables:
-        </p>
-        <div
-          class="bg-secondary flex h-12 w-full items-center justify-center rounded-md font-mono text-white"
-        >
+        <p class="mb-4 text-gray-600">The secondary color is also defined in CSS variables:</p>
+        <div class="bg-secondary flex h-12 w-full items-center justify-center rounded-md font-mono text-white">
           bg-secondary
         </div>
       </div>

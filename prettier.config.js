@@ -4,6 +4,7 @@ export default {
   singleQuote: true,
   tabWidth: 2,
   trailingComma: 'none',
+  printWidth: 120,
   plugins: ['prettier-plugin-jinja-template', 'prettier-plugin-tailwindcss'],
   overrides: [
     {
