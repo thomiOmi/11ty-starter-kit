@@ -4,6 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ title | default("11ty Starter Kit") }}</title>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ title | default('11ty Starter Kit') }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="{% ogImage title | default('11ty Starter Kit'), page.url %}" />
+
     {% if hashes.css == "dev" %}
       <link rel="stylesheet" href="/css/style.css" />
     {% else %}
