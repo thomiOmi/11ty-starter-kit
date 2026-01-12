@@ -1,5 +1,7 @@
 # 11ty-starter-kit
 
+[**Live Demo**](https://thomiomi.github.io/11ty-starter-kit/)
+
 Welcome to the **11ty-starter-kit**! 🚀
 
 This is a modern, battery-included starter template designed to get your blog, portfolio, or documentation site up and running quickly. It combines the speed of **Eleventy** with the utility of **Tailwind CSS v4** and the interactivity of **Alpine.js**.
@@ -40,6 +42,17 @@ This is a modern, battery-included starter template designed to get your blog, p
     ```
     Open your browser to `http://localhost:8080` to see your site in action!
 
+## 💻 Development Workflow
+
+To ensure code quality and consistency, follow this workflow when developing:
+
+1.  **Start the Dev Server**: Run `npm run dev` to start Eleventy with hot-reload.
+2.  **Linting**: Before committing, run `npm run lint` to check for code issues.
+3.  **Formatting**: Run `npm run format` to automatically format your code with Prettier.
+4.  **Production Build**: Run `npm run build` to simulate a production build locally.
+
+_Note: Husky is configured to automatically run lint and format on pre-commit._
+
 ## 📜 Available Scripts
 
 | Script           | Description                                                |
@@ -65,6 +78,17 @@ A quick look at the `src` directory:
 
 This starter kit comes with configuration files for the most popular hosting platforms.
 
+### GitHub Pages (Recommended)
+
+This project is configured for **GitHub Pages** using GitHub Actions.
+
+1.  Go to your repository **Settings** on GitHub.
+2.  Navigate to **Pages** (sidebar).
+3.  Under **Build and deployment**, select **GitHub Actions** as the source.
+4.  The workflow file located at `.github/workflows/deploy.yml` handles the rest.
+    - **Trigger**: Pushes to the `main` branch.
+    - **Process**: Installs dependencies, builds the site (`npm run build`), and deploys to GitHub Pages.
+
 ### Netlify
 
 A `netlify.toml` file is included.
@@ -82,15 +106,6 @@ A `vercel.json` file is included.
 2.  Import this repository.
 3.  Vercel will detect the `vercel.json` configuration.
 4.  Click **Deploy**.
-
-### GitHub Pages
-
-A GitHub Actions workflow is included in `.github/workflows/deploy.yml`.
-
-1.  Go to your repository **Settings** on GitHub.
-2.  Navigate to **Pages** (sidebar).
-3.  Under **Build and deployment**, select **GitHub Actions** as the source.
-4.  Push changes to the `main` branch to trigger a deploy.
 
 ## 📄 License
 
