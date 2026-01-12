@@ -5,10 +5,26 @@ import tailwindcss from '@tailwindcss/postcss'
 import autoprefixer from 'autoprefixer'
 import esbuild from 'esbuild'
 import crypto from 'crypto'
+import imageShortcode from './src/utils/image-shortcode.js'
+import generateOgImage from './src/utils/og-generator.js'
 
 /** @param {import("@11ty/eleventy").UserConfig} eleventyConfig */
 export default function (eleventyConfig) {
+  eleventyConfig.addNunjucksAsyncShortcode('image', imageShortcode)
+
+  // OG Image Shortcode
+  eleventyConfig.addAsyncShortcode('ogImage', async function (title, slug) {
+    if (!title) {
+      console.warn('ogImage: No title provided')
+      return ''
+    }
+    const filename = slug === '/' ? 'home' : slug ? slug.replace(/^\/|\/$/g, '').replace(/\//g, '-') : 'home'
+    const url = await generateOgImage(title, filename)
+    return url
+  })
+
   eleventyConfig.addPassthroughCopy('src/assets')
+  eleventyConfig.addPassthroughCopy({ public: '/' })
 
   // --- Environment & Hashing Helper ---
   const isProd = process.env.NODE_ENV === 'production'
@@ -116,7 +132,8 @@ export default function (eleventyConfig) {
     dir: {
       input: 'src',
       output: 'dist',
-      includes: '_includes'
+      includes: 'components',
+      layouts: 'layouts'
     },
     templateFormats: ['njk', 'md', 'html', 'css', 'js'], // Add css and js to formats
     htmlTemplateEngine: 'njk',
