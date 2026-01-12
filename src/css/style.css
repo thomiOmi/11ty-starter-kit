@@ -5,3 +5,10 @@
   --color-secondary: #ec4899;
   --font-sans: 'Inter', sans-serif;
 }
+
+/* Enable class-based dark mode for Tailwind v4 if needed,
+   but v4 works with @custom-variant or standard dark variant.
+   We use .dark class on html, so default dark: works if configured?
+   Actually v4 "Just Works" with media query. For class based, we need:
+*/
+@custom-variant dark (&:where(.dark, .dark *));

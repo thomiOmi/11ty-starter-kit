@@ -5,6 +5,9 @@
   "license": "MIT",
   "type": "module",
   "description": "Starter kit with 11ty, Tailwind CSS v4, and Alpine.js",
+  "engines": {
+    "node": "24.1.0"
+  },
   "scripts": {
     "build": "cross-env NODE_ENV=production eleventy",
     "dev": "eleventy --serve",
@@ -21,7 +24,9 @@
     "autoprefixer": "^10.4.23",
     "cross-env": "^7.0.3",
     "esbuild": "^0.27.2",
+    "fontaine": "^0.7.0",
     "postcss": "^8.5.6",
+    "postcss-font-magician": "^4.0.0",
     "satori": "^0.18.3",
     "tailwindcss": "^4.1.18"
   },
@@ -31,6 +36,7 @@
     "not dead"
   ],
   "devDependencies": {
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
     "husky": "^9.1.7",
